@@ -1,0 +1,34 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.left-enter-active,
+.left-leave-active {
+  transition: all 0.5s;
+}
+
+.left-enter-from {
+  opacity: 0;
+  transform: translateX(-500px);
+}
+
+.left-enter-to {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.left-leave-from {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.left-leave-to {
+  opacity: 0;
+  transform: translateX(500px);
+}

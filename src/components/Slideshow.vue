@@ -9,6 +9,8 @@ type Slide = {
   transitionName?: string
 }
 
+const emit = defineEmits(['init', 'scroll'])
+
 const props = defineProps({
   slides: {
     type: Array<Slide>,
@@ -28,6 +30,10 @@ const props = defineProps({
 
 const slideshow: Ref<HTMLDivElement | null> = ref(null)
 const scrollCount: Ref<number> = ref(0)
+
+watch(scrollCount, () => {
+  emit('scroll', scrollCount.value)
+})
 
 const { top } = useElementBounding(slideshow)
 
@@ -49,6 +55,12 @@ watch(top, () => {
 
 const active = computed(() => top.value === 0)
 
+watch(active, (newValue) => {
+  if(newValue) {
+    lockTheScreen()
+  }
+})
+
 let allowedScroll = true
 let touchstart = 0
 let touchend = 0
@@ -56,7 +68,10 @@ let touchend = 0
 useEventListener(slideshow, 'wheel', (e: any) : void => {
   if(!allowedScroll || !active.value) return;
   if(e.wheelDeltaY < 0) {
-    if(lastElement.value) return;
+    if(lastElement.value) {
+      unlockTheScreen()
+      return
+    }
     if(prevToLastElement.value) {
       scrolledToLastElement = true
       setTimeout(() => {
@@ -65,7 +80,10 @@ useEventListener(slideshow, 'wheel', (e: any) : void => {
     }
     scrollCount.value++
   } else {
-    if(firstElement.value) return;
+    if(firstElement.value) {
+      unlockTheScreen()
+      return
+    }
     if(nextToFirstElement.value) {
       scrolledToFirstElement = true
       setTimeout(() => {
@@ -83,7 +101,10 @@ useEventListener(slideshow, 'wheel', (e: any) : void => {
 useEventListener(document, 'keydown', (e: KeyboardEvent) : void => {
   if(!allowedScroll || !active.value) return;
   if(e.key === 'ArrowDown') {
-    if(lastElement.value) return;
+    if(lastElement.value) {
+      unlockTheScreen()
+      return
+    }
     if(prevToLastElement.value) {
       scrolledToLastElement = true
       setTimeout(() => {
@@ -92,7 +113,10 @@ useEventListener(document, 'keydown', (e: KeyboardEvent) : void => {
     }
     scrollCount.value++
   } else if(e.key === 'ArrowUp') {
-    if(firstElement.value) return;
+    if(firstElement.value) {
+      unlockTheScreen()
+      return
+    }
     if(nextToFirstElement.value) {
       scrolledToFirstElement = true
       setTimeout(() => {
@@ -116,7 +140,11 @@ useEventListener(slideshow, 'touchend', (e: TouchEvent): void => {
   if(!active.value) return
   touchend = e.changedTouches[0].screenY
   if(swipedDown()) {
-    if(firstElement.value) return;
+    if(firstElement.value) {
+      forMobileScrollAuto('up')
+      unlockTheScreen()
+      return
+    }
     if(nextToFirstElement.value) {
       scrolledToFirstElement = true
       setTimeout(() => {
@@ -125,16 +153,42 @@ useEventListener(slideshow, 'touchend', (e: TouchEvent): void => {
     }
     scrollCount.value--
   } else if(swipedUp()) {
+    if(lastElement.value) {
+      forMobileScrollAuto('down')
+      unlockTheScreen()
+      return
+    }
     if(prevToLastElement.value) {
       scrolledToLastElement = true
       setTimeout(() => {
         scrolledToLastElement = false
       }, 200)
     }
-    if(lastElement.value) return;
     scrollCount.value++
   }
 })
+
+function forMobileScrollAuto(direction: string) {
+  if(direction === 'up') {
+    window.scrollBy({
+      top: -window.innerHeight,
+      behavior: 'smooth'
+    })
+  } else if(direction === 'down') {
+    window.scrollBy({
+      top: window.innerHeight,
+      behavior: 'smooth'
+    })
+  }
+}
+
+function lockTheScreen() {
+  document.body.style.overflowY = 'hidden'
+}
+
+function unlockTheScreen() {
+  document.body.style.overflowY = 'auto'
+}
 
 function swipedUp() : boolean {
   const diff = touchend - touchstart
@@ -150,8 +204,9 @@ function swipedDown() : boolean {
 
 <template>
     <div ref="slideshow" class="slideshow" :style="{
+      touchAction: active ? 'none' : 'auto',
       height: '100dvh',
-      width: '100vw',
+      width: '100%',
       zIndex: 0,
       backgroundColor: props.slides[scrollCount]?.backgroundColor || 'white',
       transition: `background-color ${ props.backgroundColorTransitionDurationInMiliseconds }ms ${ props.backgroundColorTransitionMode }`

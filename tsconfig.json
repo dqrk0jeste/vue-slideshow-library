@@ -12,5 +12,5 @@
       "path": "./tsconfig.app.json"
     }
   ],
-  "exclude": ["src/App.vue", "src/main.ts"],
+  "exclude": ["src/App.vue", "src/main.ts, src/components/Test.vue"],
 }

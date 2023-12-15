@@ -27,6 +27,7 @@ export default defineConfig({
       output: {
         globals: {
           vue: "Vue",
+          "@vueuse/core": "core"
         },
       },
     },
