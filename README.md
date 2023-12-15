@@ -22,6 +22,7 @@ import { Slideshow } from vue-slideshow-library
     :slides="[<Slide>]"
     :background-color-transition-duration-in-miliseconds="<number>"
     :background-color-transition-mode="<mode or bezier curve>"
+/>
 ```
 
 where Slide is
