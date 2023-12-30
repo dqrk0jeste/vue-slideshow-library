@@ -36,7 +36,7 @@ import Slideshow from './components/Slideshow.vue';
           title: 'SLIDE 2'
         },
         backgroundColor: 'blue',
-        transitionName: 'left'
+        transitionName: 'fade'
       },
       {
         component: Test as DefineComponent,
@@ -52,7 +52,7 @@ import Slideshow from './components/Slideshow.vue';
           title: 'SLIDE 4'
         },
         backgroundColor: 'red',
-        transitionName: 'left'
+        transitionName: 'fade'
       }
     ]"
     :background-color-transition-duration-in-miliseconds="1000"

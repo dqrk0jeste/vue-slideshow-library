@@ -38,8 +38,8 @@ type Slide = {
 
 ## Other
 
-- Component also provides a `scroll` emit every time a new slide is displayed, so you can use it to sync with some other featues of your app.
-- Slides can be scrolled by mouse wheel, touch nad arrow keys.
+- Component also provides a `scroll` emit every time a new slide is displayed, so you can use it to sync with some other features of your app.
+- Slides can be scrolled by mouse wheel, touch and arrow keys.
 
 ## Contributing
 

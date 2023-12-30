@@ -32,3 +32,25 @@ body {
   opacity: 0;
   transform: translateX(500px);
 }
+
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.5s;
+}
+
+.fade-enter-from {
+  opacity: 0;
+}
+
+.fade-enter-to {
+  opacity: 1;
+}
+
+.fade-leave-from {
+  opacity: 1;
+}
+
+.fade-leave-to {
+  opacity: 0;
+}

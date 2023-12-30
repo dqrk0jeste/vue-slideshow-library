@@ -211,7 +211,7 @@ function swipedDown() : boolean {
       backgroundColor: props.slides[scrollCount]?.backgroundColor || 'white',
       transition: `background-color ${ props.backgroundColorTransitionDurationInMiliseconds }ms ${ props.backgroundColorTransitionMode }`
     }">
-      <Transition name="left" mode="out-in">
+      <Transition :name="props.slides[scrollCount].transitionName" mode="out-in">
         <div :key="scrollCount">
           <component :is="props.slides[scrollCount].component" v-bind="props.slides[scrollCount].props"/>
         </div>
