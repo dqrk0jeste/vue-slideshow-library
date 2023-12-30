@@ -19,7 +19,7 @@ import { Slideshow } from vue-slideshow-library
 ```sh
 <Slideshow
     @scroll="(count) => console.log(count)"
-    :slides="[<Slide>]"
+    :slides="Slide[]"
     :background-color-transition-duration-in-miliseconds="<number>"
     :background-color-transition-mode="<mode or bezier curve>"
 />
